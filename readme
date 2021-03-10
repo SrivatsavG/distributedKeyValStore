@@ -1,0 +1,34 @@
+Programming language : Java
+IDE: Netbeans
+Membership tracking methods: FD,T
+
+A.Build project
+
+B.Instructions to run the project without docker
+	----------------STARTING SERVERS-----------------
+	B.1. TCP Membership server
+		A.1.a. Running membership server
+			java -jar GenericNode.jar ms 4410
+		A.1.b.	Running TCP servers
+			java -jar GenericNode.jar ts <server port number> localhost 4410
+			
+	B.2. Static file membership tracking DYNAMIC
+		A.2.a. Running TCP servers
+			java -jar GenericNode.jar ts <server port number>
+			
+	---------------RUNNING CLIENTS-------------------
+	B.3. Running client
+		PUT   : java -jar GenericNode.jar tc localhost <sever port number> put <key> <value>
+		GET   : java -jar GenericNode.jar tc localhost <sever port number> get <key>
+		DELETE: java -jar GenericNode.jar tc localhost <sever port number> del <key>
+		STORE : java -jar GenericNode.jar tc localhost <sever port number> store 
+		EXIT  : java -jar GenericNode.jar tc localhost <sever port number> exit 
+		
+
+
+	
+			
+
+		
+
+       
