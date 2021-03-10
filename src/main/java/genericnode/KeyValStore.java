@@ -153,12 +153,11 @@ class KeyValStore {
                         }
 
                         sb.append("key:" + entry.getKey() + ":" + "value:" + entry.getValue().data);
-                        
-                        
-                        if(entryCount == map.size() - 2){
+
+                        if (entryCount == map.size() - 2) {
                             sb.append("\nSTORE-END");
                         }
-                        
+
                         entryCount++;
 
                         if (entryCount < map.size()) {
@@ -181,6 +180,7 @@ class KeyValStore {
             if (Integer.parseInt(member.port) == port) {
                 continue; //SKIP IF SAME NODE
             }
+
             TCPClient tcpClient = new TCPClient(member.ip, Integer.parseInt(member.port), input.toString());
             String serverResponse = tcpClient.connect();
             if (serverResponse.equals(CommandAck.abort.toString())) {

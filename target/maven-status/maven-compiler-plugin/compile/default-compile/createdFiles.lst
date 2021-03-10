@@ -1,4 +1,5 @@
 genericnode/MembershipList$1.class
+genericnode/CommandMembershipMethod.class
 genericnode/KeyValStore$1.class
 genericnode/CommandAck.class
 genericnode/CommandTCP.class
@@ -14,3 +15,4 @@ genericnode/Member.class
 genericnode/Value.class
 genericnode/MembershipList.class
 genericnode/InputTCP.class
+genericnode/WorkerTCP$1.class

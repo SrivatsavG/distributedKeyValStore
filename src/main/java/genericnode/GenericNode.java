@@ -5,12 +5,18 @@
  */
 package genericnode;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -21,12 +27,12 @@ public class GenericNode {
     /**
      * @param args the command line arguments
      */
-
     static boolean stopped = false;
     static ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    static String MEMBERSHIPFILENAME = "../membership.txt";
 
     public static void main(String[] args) throws IOException {
-
+        String myIP = InetAddress.getLocalHost().getHostAddress();
         if (args.length > 0) {
             if (args[0].equals("tc")) {
                 //READ INPUT
@@ -44,28 +50,53 @@ public class GenericNode {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (args[0].equals("ts")) {
+            } else if (args[0].equals("ts") && args.length == 2) { //SERVER FOR STATIC FILE
+                //java -jar GenericNode.jar ts <server port number>
+                int port = Integer.parseInt(args[1]);
+
+                try ( ServerSocket serverSocket = new ServerSocket(port)) {
+                    System.out.println("Connected To server");
+
+                    //Create Key val store object
+                    KeyValStore kv = new KeyValStore();
+                    URI gsOutputFileName;
+
+                    //-----------------------------WRITE TO FILE------------------------------
+                    writeToMembershipFile(port);
+
+                    System.out.println("Starting to listen");
+
+                    //Listen to clients
+                    TCPServer tcpServer = new TCPServer();
+                    tcpServer.startThreads(port, serverSocket, kv, MEMBERSHIPFILENAME);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else if (args[0].equals("ts") && args.length == 4) { //SERVER FOR DYNAMIC TCP MEMBERSHIP
                 //java -jar GenericNode.jar ts <server port number> <membership-server-IP> <membership-server-port> 
+
                 int port = Integer.parseInt(args[1]);
                 String membershipServerIP = args[2];
                 int membershipServerPort = Integer.parseInt(args[3]);
 
                 try ( ServerSocket serverSocket = new ServerSocket(port)) {
                     System.out.println("Connected To server");
-                    
+
                     //Create Key val store object
                     KeyValStore kv = new KeyValStore();
 
                     //Connect to membership server and Send ip and port to membership server
-                    TCPClient tcpClient = new TCPClient(membershipServerIP, membershipServerPort, CommandMembership.write + " " + "localhost" + " " + port);
+                    TCPClient tcpClient = new TCPClient(membershipServerIP, membershipServerPort, CommandMembership.write + " " + myIP + " " + port);
                     String membershipServerResponse = tcpClient.connect();
                     System.out.println(membershipServerResponse);
-                    
+
                     System.out.println("Starting to listen");
-                    
+
                     //Listen to clients
                     TCPServer tcpServer = new TCPServer();
-                    tcpServer.startThreads(port,serverSocket,kv,membershipServerIP, membershipServerPort);
+                    tcpServer.startThreads(port, serverSocket, kv, membershipServerIP, membershipServerPort);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -79,10 +110,10 @@ public class GenericNode {
 
                     //Create MembershipList object
                     MembershipList ml = new MembershipList();
-                    
+
                     //Listen to clients
                     TCPServer tcpServer = new TCPServer();
-                    tcpServer.startThreads(serverSocket,ml);
+                    tcpServer.startThreads(serverSocket, ml);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -107,5 +138,16 @@ public class GenericNode {
                     + "rmis  run RMI Server.\n";
             System.out.println(msg);
         }
+    }
+
+    public static void writeToMembershipFile(int port) throws IOException {
+        Path pathOfLog = Paths.get(MEMBERSHIPFILENAME);
+        Charset charSetOfLog = Charset.forName("US-ASCII");
+        BufferedWriter bw = Files.newBufferedWriter(pathOfLog, charSetOfLog, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        String myIP = InetAddress.getLocalHost().getHostAddress();
+        String ipPort = "myIP" + "-" + port;
+        bw.append(ipPort, 0, ipPort.length());
+        bw.newLine();
+        bw.close();
     }
 }
