@@ -17,13 +17,15 @@ class KeyValStore {
     ConcurrentMap<String, Value> map = new ConcurrentHashMap<>();
     final int MAXSIZE = 65000;
 
-    public String operation(InputTCP input, String[] members, int port) {
+    public String operation(InputTCP input, String[] members, String myIP, int port) {
         StringBuilder sb = new StringBuilder("");
         try {
 
             CommandTCP cmd = input.cmd;
             String key = input.key;
             String val = input.val;
+            String senderIP = input.senderIP;
+            String senderPort = input.senderPort;
             Value v;
             boolean locked;
 
@@ -32,21 +34,21 @@ class KeyValStore {
                     //LOCK LOCALLY IF OLD KEY,NO NEED TO LOCK NEW KEY
                     v = map.get(key);
                     if (v != null) {
-                        map.put(key, new Value(v.data, true));
+                        map.put(key, new Value(v.data, true, myIP + "-" + port));//Say that this node locked it
 
-                        //CHECK ALL MEMBERS TO SEE IF KEY IS LOCKED, 
-                        locked = operationUtil(port, members, CommandTCP.dput1.toString(), key, val);
+                        //CHECK ALL MEMBERS TO SEE IF KEY IS LOCKED BY ANY NODE, 
+                        locked = operationUtil(myIP, port, members, CommandTCP.dput1.toString(), key, val);
                         if (locked) { // SEND dputabort to all members if locked
-                            operationUtil(port, members, CommandTCP.dputabort.toString(), key, val);
+                            operationUtil(myIP, port, members, CommandTCP.dputabort.toString(), key, val);
                             break;
                         }
                     }
 
                     //CALL DPUT2 ON ALL MEMBERS FOR OLD AND NEW KEY IF ALL RETURN ACK
-                    operationUtil(port, members, CommandTCP.dput2.toString(), key, val);
+                    operationUtil(myIP, port, members, CommandTCP.dput2.toString(), key, val);
 
                     //ADD NEW VAL TO MAP AND UNLOCK
-                    map.put(key, new Value(val, false));
+                    map.put(key, new Value(val, false, null));
                     sb.append("server response: put key= " + key);
                     break;
                 case dput1:
@@ -62,48 +64,53 @@ class KeyValStore {
                         break;
                     }
                     //Lock and send ack
-                    map.put(key, new Value(v.data, true));
+                    //Register that this node locked the key in its key val store
+                    map.put(key, new Value(v.data, true, senderIP + "-" + senderPort));
                     sb.append(CommandAck.ack);//SEND ACK IF NOT LOCKED
                     break;
                 case dput2:
-                    map.put(key, new Value(val, false));
+                    map.put(key, new Value(val, false, null));
                     sb.append("server response: put key= " + key);
                     break;
                 case dputabort:
-                    //UNLOCK THE KEY
                     v = map.get(key);
                     if (v == null) {
                         break;
                     }
-
-                    map.put(key, new Value(v.data, false));
+                    //Unlock only if the member who locked the key asked it to be unlocked. 
+                    //Other nodes cannot unlock a key that was locked by a node
+                    if (v.lockedBy.equals(senderIP + "-" + senderPort)) {
+                        map.put(key, new Value(v.data, false, null));
+                    }
                     break;
                 case get:
+                    //LOCK OR UNLOCK DOES NOT MATTER
                     v = map.get(key);
                     if (v == null) {
-                        sb.append("server response: invalid key");
+                        sb.append("server response: invalid key: " + key);
                         break;
                     }
-
                     sb.append("server response: get key= " + key + " Get val: " + v.data);
                     break;
                 case del:
                     //LOCK LOCALLY
                     v = map.get(key);
                     if (v == null) {
+                        sb.append("server response: invalid key: " + key);
                         break; //NOT THERE
                     }
-                    map.put(key, new Value(v.data, true));
+                    //Register that this node locked the key in its key val store
+                    map.put(key, new Value(v.data, true, myIP + "-" + port));
 
                     //CHECK ALL MEMBERS TO SEE IF KEY IS LOCKED
-                    locked = operationUtil(port, members, CommandTCP.ddel1.toString(), key, val);
+                    locked = operationUtil(myIP, port, members, CommandTCP.ddel1.toString(), key, val);
                     if (locked) { // SEND ddelabort to all members if locked
-                        operationUtil(port, members, CommandTCP.ddelabort.toString(), key, val);
+                        operationUtil(myIP, port, members, CommandTCP.ddelabort.toString(), key, val);
                         break;
                     }
 
                     //Call ddel2 on all other members
-                    operationUtil(port, members, CommandTCP.ddel2.toString(), key, val);
+                    operationUtil(myIP, port, members, CommandTCP.ddel2.toString(), key, val);
 
                     //Del from map and unlock
                     map.remove(key);
@@ -122,7 +129,7 @@ class KeyValStore {
                         break;
                     }
                     //Lock and send ack if not locked
-                    map.put(key, new Value(v.data, true));
+                    map.put(key, new Value(v.data, true, senderIP + "-" + senderPort));
                     sb.append(CommandAck.ack);
                     break;
                 case ddel2:
@@ -139,7 +146,12 @@ class KeyValStore {
                     if (v == null) {
                         break; //NOT THERE
                     }
-                    map.put(key, new Value(v.data, false));
+                  
+                    //Unlock only if the member who locked the key asked it to be unlocked. 
+                    //Other nodes cannot unlock a key that was locked by a node
+                    if (v.lockedBy.equals(senderIP + "-" + senderPort)) {
+                        map.put(key, new Value(v.data, false, null));
+                    }
                     break;
                 case store:
                     int entryCount = 0;
@@ -173,11 +185,11 @@ class KeyValStore {
 
     }
 
-    private boolean operationUtil(int port, String[] members, String command, String key, String val) {
+    private boolean operationUtil(String myIP, int port, String[] members, String command, String key, String val) {
         for (String m : members) {
             Member member = new Member(m);
-            InputTCP input = new InputTCP(command, key, val);
-            if (Integer.parseInt(member.port) == port) {
+            InputTCP input = new InputTCP(command, key, val, myIP, String.valueOf(port));
+            if (member.ip.equals(myIP) && Integer.parseInt(member.port) == port) {
                 continue; //SKIP IF SAME NODE
             }
 

@@ -68,7 +68,7 @@ class WorkerTCP implements Runnable {
 
             TCPClient tcpClient;
             String membershipServerResponse;
-            
+
             String myIP = InetAddress.getLocalHost().getHostAddress();
 
             //IF EXIT, CLOSE THREAD and SOCKETS and remove from membershiplist
@@ -82,7 +82,7 @@ class WorkerTCP implements Runnable {
                         membershipServerResponse = tcpClient.connect();
                         break;
                     case file:
-                        remove(myIP+"-"+port);
+                        remove(myIP + "-" + port);
                 }
                 return;
             }
@@ -102,10 +102,9 @@ class WorkerTCP implements Runnable {
                 case file:
                     members = findMembers();
                     break;
-
             }
             //If not exit, do the operation
-            String output = kv.operation(input, members, port);
+            String output = kv.operation(input, members, myIP, port);
             out.println(output);
             clientSocket.close();
         } catch (IOException ex) {
@@ -123,6 +122,7 @@ class WorkerTCP implements Runnable {
             }
         }
         Files.write(Paths.get(membershipFilename), newLines, StandardCharsets.UTF_8);
+
     }
 
     public String[] findMembers() throws IOException {

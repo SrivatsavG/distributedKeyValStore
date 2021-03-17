@@ -29,14 +29,12 @@ public class GenericNode {
      */
     static boolean stopped = false;
     static ExecutorService threadPool = Executors.newFixedThreadPool(10);
-    static String MEMBERSHIPFILENAME = "../membership.txt";
+    static String MEMBERSHIPFILENAME = "/tmp/membership.txt";
 
     public static void main(String[] args) throws IOException {
         String myIP = InetAddress.getLocalHost().getHostAddress();
         if (args.length > 0) {
             if (args[0].equals("tc")) {
-                //READ INPUT
-                //System.out.println("TCP CLIENT");
                 String addr = args[1];
                 int port = Integer.parseInt(args[2]);
                 String cmd = args[3];
@@ -59,7 +57,6 @@ public class GenericNode {
 
                     //Create Key val store object
                     KeyValStore kv = new KeyValStore();
-                    URI gsOutputFileName;
 
                     //-----------------------------WRITE TO FILE------------------------------
                     writeToMembershipFile(port);
@@ -123,19 +120,13 @@ public class GenericNode {
         } else {
             String msg = "GenericNode Usage:\n\n"
                     + "Client:\n"
-                    + "uc/tc <address> <port> put <key> <msg>  UDP/TCP CLIENT: Put an object into store\n"
-                    + "uc/tc <address> <port> get <key>  UDP/TCP CLIENT: Get an object from store by key\n"
-                    + "uc/tc <address> <port> del <key>  UDP/TCP CLIENT: Delete an object from store by key\n"
-                    + "uc/tc <address> <port> store  UDP/TCP CLIENT: Display object store\n"
-                    + "uc/tc <address> <port> exit  UDP/TCP CLIENT: Shutdown server\n"
-                    + "rmic <address> put <key> <msg>  RMI CLIENT: Put an object into store\n"
-                    + "rmic <address> get <key>  RMI CLIENT: Get an object from store by key\n"
-                    + "rmic <address> del <key>  RMI CLIENT: Delete an object from store by key\n"
-                    + "rmic <address> store  RMI CLIENT: Display object store\n"
-                    + "rmic <address> exit  RMI CLIENT: Shutdown server\n\n"
+                    + "tc <address> <port> put <key> <msg>  TCP CLIENT: Put an object into store\n"
+                    + "tc <address> <port> get <key> TCP CLIENT: Get an object from store by key\n"
+                    + "tc <address> <port> del <key> TCP CLIENT: Delete an object from store by key\n"
+                    + "tc <address> <port> store TCP CLIENT: Display object store\n"
+                    + "tc <address> <port> exit  TCP CLIENT: Shutdown server\n"
                     + "Server:\n"
-                    + "us/ts <port>  UDP/TCP SERVER: run udp or tcp server on <port>.\n"
-                    + "rmis  run RMI Server.\n";
+                    + "ts <port>  UDP/TCP SERVER: tcp server on <port>.\n";
             System.out.println(msg);
         }
     }
@@ -145,7 +136,7 @@ public class GenericNode {
         Charset charSetOfLog = Charset.forName("US-ASCII");
         BufferedWriter bw = Files.newBufferedWriter(pathOfLog, charSetOfLog, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         String myIP = InetAddress.getLocalHost().getHostAddress();
-        String ipPort = "myIP" + "-" + port;
+        String ipPort = myIP + "-" + port;
         bw.append(ipPort, 0, ipPort.length());
         bw.newLine();
         bw.close();

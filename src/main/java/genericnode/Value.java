@@ -12,9 +12,11 @@ package genericnode;
 public class Value {
     String data;
     boolean locked;
+    String lockedBy;
     
-    public Value(String data, boolean locked){
+    public Value(String data, boolean locked, String lockedBy){
         this.data = data;
         this.locked = locked;
+        this.lockedBy = lockedBy;
     }
 }
