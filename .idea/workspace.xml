@@ -4,16 +4,54 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da631ad8-d5b5-4132-af62-dc8c2c866d0b" name="Default Changelist" comment="" />
+    <list default="true" id="da631ad8-d5b5-4132-af62-dc8c2c866d0b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/GenericNode.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker_client/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker_client/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker_client/NEED-to-add-GenericNode.jar-HERE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker_server/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker_server/NEED-to-add-GenericNode.jar-HERE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker_server/runserver.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/genericnode/GenericNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/genericnode/GenericNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/genericnode/KeyValStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/genericnode/KeyValStore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/genericnode/TCPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/genericnode/TCPServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/genericnode/Value.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/genericnode/Value.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/GenericNode.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GenericNode.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/CommandAck.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/CommandAck.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/CommandMembership.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/CommandMembership.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/CommandMembershipMethod.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/CommandMembershipMethod.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/CommandTCP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/CommandTCP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/GenericNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/GenericNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/InputMembership.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/InputMembership.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/InputTCP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/InputTCP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/KeyValStore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/KeyValStore$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/KeyValStore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/KeyValStore.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/Member.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/Member.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/MembershipList$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/MembershipList$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/MembershipList.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/MembershipList.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/TCPClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/TCPClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/TCPServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/TCPServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/Value.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/Value.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/WorkerMembership.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/WorkerMembership.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/WorkerTCP$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/WorkerTCP$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/genericnode/WorkerTCP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/genericnode/WorkerTCP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="KotlinCodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="ProjectId" id="1pRHJPIZ2IgP8HW7Mh8sSUkMwv2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -21,6 +59,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -36,5 +75,16 @@
       <updated>1615138915742</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

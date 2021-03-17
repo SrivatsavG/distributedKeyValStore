@@ -1,21 +1,40 @@
 Programming language : Java
 IDE: Netbeans
-Membership tracking methods: FD,T
 
-A.Build project
+Membership tracking methods: FD,T (Dynamic membership with static file & Centralized membership server with TCP)
+
+Other features implemented
+1. Multithreaded membership server and TCP server
+2. Threadpools
+3. Concurrent hashmaps
+
+A.Build project using Netbeans
+
+	---> To test the script without docker, follow instructions under B.
+	---> To test the script with docker, follow instructions under C.
 
 B.Instructions to run the project without docker
+
 	----------------STARTING SERVERS-----------------
-	B.1. TCP Membership server
-		A.1.a. Running membership server
-			java -jar GenericNode.jar ms 4410
-		A.1.b.	Running TCP servers
-			java -jar GenericNode.jar ts <server port number> localhost 4410
-			
-	B.2. Static file membership tracking DYNAMIC
+	B.0. cd to the folder ( target folder ) with the GenericNode.jar file.
+	
+		---> To start the dynamic file membership tracking, follow B.1.
+		---> To start the Centralized TCP Membership server, follow B.2. 
+	
+	B.1. Static file membership tracking DYNAMIC
 		A.2.a. Running TCP servers
 			java -jar GenericNode.jar ts <server port number>
-			
+		A.2.b. NOTE 
+			The membership file is located in tmp/membership.txt. An exit command from the client to a server shuts
+			down the server and not the entire network. Only that node is deleted from the membership list and the distributed system 				remains online with all the other nodes. Therefore to ensure that membership list is maintained properly across different 				tests, the tester has to shut down all the individual nodes one by one so that the list is finally empty. The other option 
+			is to delete the contents of the file manually between tests. 
+	
+	B.2. TCP Membership server
+		B.1.a. Running membership server
+			java -jar GenericNode.jar ms 4410
+		B.1.b.	Running TCP servers
+			java -jar GenericNode.jar ts <server port number> localhost 4410
+						
 	---------------RUNNING CLIENTS-------------------
 	B.3. Running client
 		PUT   : java -jar GenericNode.jar tc localhost <sever port number> put <key> <value>
@@ -25,8 +44,40 @@ B.Instructions to run the project without docker
 		EXIT  : java -jar GenericNode.jar tc localhost <sever port number> exit 
 		
 
+C. Instructions to run the project on docker
+	
+	C.0. Copy and paste the jar file in the 4 folders: docker_client, docker_TCP_server_file, docker_TCP_server_centralServer & docker_membership_server.
 
 	
+	C.2. Start the membership server container
+		
+		C.2.a. The runserver.sh in the docker_membership_server folder is configured to start the membership server in port 4410.
+		
+		C.2.b. Build the membershipserver container, run it and find its IP address using instructions provided in pages 5 & 6 of assignment2.pdf.
+		
+		C.2.c. Copy the IP address. We will refer to this IP address as membership_server_IP
+		
+	C.3. Start the TCP server container
+	
+		---> For file based membership tracking, follow C.3.a.
+		---> For central server based membership tracking, follow C.3.b.
+		
+		C.3.a. Open the runserver.sh under the docker_TCP_server_file folder. Uncomment the command and enter a port. Build the container. 			Note the ip address and the port of the server. We will refer to the former as server_IP and the latter as server_port
+		
+		C.3.b. ***************************************************************
+		
+	
+	C.4. Start the TCP client container
+	
+		C.4.a. Build the container using the docker file in the docker_client. 
+		
+		
+	
+		
+		
+		
+		
+		
 			
 
 		

@@ -13,11 +13,7 @@ public class Member {
     String ip;
     String port;
     
-    public Member(String ip,String port){
-        this.ip = ip;
-        this.port = port;
-    }
-    
+   
     public Member(String s){
         String[] sSplit = s.split("-");
         this.ip = sSplit[0];
