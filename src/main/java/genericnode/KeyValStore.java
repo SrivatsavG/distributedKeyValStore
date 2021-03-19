@@ -48,7 +48,7 @@ class KeyValStore {
                     operationUtil(myIP, port, members, CommandTCP.dput2.toString(), key, val);
 
                     //ADD NEW VAL TO MAP AND UNLOCK
-                    map.put(key, new Value(val, false, null));
+                    map.put(key, new Value(val, false, ""));
                     sb.append("server response: put key= " + key);
                     break;
                 case dput1:
@@ -69,7 +69,7 @@ class KeyValStore {
                     sb.append(CommandAck.ack);//SEND ACK IF NOT LOCKED
                     break;
                 case dput2:
-                    map.put(key, new Value(val, false, null));
+                    map.put(key, new Value(val, false, ""));
                     sb.append("server response: put key= " + key);
                     break;
                 case dputabort:
@@ -80,7 +80,7 @@ class KeyValStore {
                     //Unlock only if the member who locked the key asked it to be unlocked. 
                     //Other nodes cannot unlock a key that was locked by a node
                     if (v.lockedBy.equals(senderIP + "-" + senderPort)) {
-                        map.put(key, new Value(v.data, false, null));
+                        map.put(key, new Value(v.data, false, ""));
                     }
                     break;
                 case get:
@@ -150,7 +150,7 @@ class KeyValStore {
                     //Unlock only if the member who locked the key asked it to be unlocked. 
                     //Other nodes cannot unlock a key that was locked by a node
                     if (v.lockedBy.equals(senderIP + "-" + senderPort)) {
-                        map.put(key, new Value(v.data, false, null));
+                        map.put(key, new Value(v.data, false, ""));
                     }
                     break;
                 case store:
