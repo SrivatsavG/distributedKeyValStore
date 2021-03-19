@@ -87,22 +87,25 @@ class WorkerTCP implements Runnable {
                 return;
             }
 
-            //FIND ALL MEMBERS    
-            switch (membershipMethod) {
-                case tcp:
-                    tcpClient = new TCPClient(membershipServerIP, membershipServerPort, CommandMembership.read.toString());
-                    membershipServerResponse = tcpClient.connect();
-                    String[] membershipServerResponseSplit = membershipServerResponse.split(",");
-                    members = new String[membershipServerResponseSplit.length];
-                    int i = 0;
-                    for (String m : membershipServerResponse.split(",")) {
-                        members[i++] = m;
-                    }
-                    break;
-                case file:
-                    members = findMembers();
-                    break;
+            //FIND ALL MEMBERS ONLY FOR PUT AND DEL COMMANDS 
+            if (input.cmd == CommandTCP.put || input.cmd == CommandTCP.del) {
+                switch (membershipMethod) {
+                    case tcp:
+                        tcpClient = new TCPClient(membershipServerIP, membershipServerPort, CommandMembership.read.toString());
+                        membershipServerResponse = tcpClient.connect();
+                        String[] membershipServerResponseSplit = membershipServerResponse.split(",");
+                        members = new String[membershipServerResponseSplit.length];
+                        int i = 0;
+                        for (String m : membershipServerResponse.split(",")) {
+                            members[i++] = m;
+                        }
+                        break;
+                    case file:
+                        members = findMembers();
+                        break;
+                }
             }
+
             //If not exit, do the operation
             String output = kv.operation(input, members, myIP, port);
             out.println(output);

@@ -8,7 +8,16 @@ Other features implemented
 2. Threadpools
 3. Concurrent hashmaps
 
-A.Build project using Netbeans
+
+TCP membership working
+	The servers make a request to the membership server only when there is a put or a del request from the client. Only in these two cases, a server needs to find the other members in the network. The members are served as an arraylist in the central membership server.   An exit command from the client to a server shuts down the server and not the entire network. Only that node is deleted from the membership list and the distributed system remains online with all the other nodes.
+	
+File membership working
+	On start, a server creates a new txt file if it does not exist. It appends its own ip address and port number to the file. On exit, the server accesses the txt file and deletes only its ip address and port from the file. Therefore to ensure that membership list is maintained properly across different tests, the tester has to shut down all the individual nodes one by one so that the list is finally empty. The other option is to delete the contents of the file manually between tests. 
+
+--------------------------INSTRUCTIONS TO USE THE PROGRAM---------------------------
+
+A.Build project using Netbeans and from CLI with maven. (Anyone should work)
 
 	---> To test the script without docker, follow instructions under B.
 	---> To test the script with docker, follow instructions under C.
@@ -25,9 +34,7 @@ B.Instructions to run the project without docker
 		B.1.a. Running TCP servers
 			java -jar GenericNode.jar ts <server port number>
 		B.1.b. NOTE 
-			The membership file is located in tmp/membership.txt. An exit command from the client to a server shuts
-			down the server and not the entire network. Only that node is deleted from the membership list and the distributed system 				remains online with all the other nodes. Therefore to ensure that membership list is maintained properly across different 				tests, the tester has to shut down all the individual nodes one by one so that the list is finally empty. The other option 
-			is to delete the contents of the file manually between tests. 
+			The membership file is located in tmp/membership.txt. 
 	
 	B.2. TCP Membership server
 		B.1.a. Running membership server
@@ -65,7 +72,6 @@ C. Instructions to run the project on docker
 		       	sudo docker run -it -v "$(pwd)":/tmp -d --rm <server name>
 		       			
 		       Note the ip address and the port of the server. We will refer to the former as server_IP and the latter as server_port
-	
 	
 	C.2. TCP Membership server
 		
