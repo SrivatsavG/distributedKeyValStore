@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,6 +44,28 @@ public class TCPServer {
         }
     }
 
+    public void startThreads(int port, ServerSocket serverSocket, KeyValStore kv, String membershipFilename) {
+        try {
+            while (!threadPool.isShutdown()) {
+                Socket clientSocket;
+                try {
+                    clientSocket = serverSocket.accept();
+                    threadPool.execute(new WorkerTCP(port, clientSocket, serverSocket, kv, threadPool, null, -1, CommandMembershipMethod.file, membershipFilename));
+                } catch (IOException e) {
+                    if (threadPool.isShutdown()) {
+                        System.out.println("Membership Server Stopped.");
+                        break;
+                    }
+                    throw new RuntimeException(
+                            "Error accepting client connection", e);
+                }
+            }
+            threadPool.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     //MEMBERSHIP TCP SERVER
     public void startThreads(ServerSocket serverSocket, MembershipList ml) {
         try {
@@ -60,29 +84,7 @@ public class TCPServer {
                 }
             }
             threadPool.awaitTermination(10, TimeUnit.SECONDS);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void startThreads(int port, ServerSocket serverSocket, KeyValStore kv, String membershipFilename) {
-        try {
-            while (!threadPool.isShutdown()) {
-                Socket clientSocket;
-                try {
-                    clientSocket = serverSocket.accept();
-                    threadPool.execute(new WorkerTCP(port, clientSocket, serverSocket, kv, threadPool, null, -1, CommandMembershipMethod.file, membershipFilename));
-                } catch (IOException e) {
-                    if (threadPool.isShutdown()) {
-                        System.out.println("Membership Server Stopped.");
-                        break;
-                    }
-                    throw new RuntimeException(
-                            "Error accepting client connection", e);
-                }
-            }
-            threadPool.awaitTermination(10, TimeUnit.SECONDS);
         } catch (Exception e) {
             e.printStackTrace();
         }
